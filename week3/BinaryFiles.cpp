@@ -12,6 +12,7 @@ struct Person
 };
 
 // Rule of thumb: If the object is bigger than 16 byte, always pass it by reference
+// unless you want to edit it as a copy inside the function
 void writePerson(const char* filePath, const Person& person)
 {
     // Open the file for binary writing
