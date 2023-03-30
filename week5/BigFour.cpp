@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#pragma warning(disable:4996)
 
 // We are going to use the class from the last document
 // Refer to it for details on constructors, methods, 'this' and shadowing!
@@ -54,10 +55,12 @@ class BankAccount
 BankAccount::BankAccount()
     : balance(0), name(nullptr)
 {
+    setName("DEFAULT_NAME");
     strcpy(id, "UNKNOWN");
 }
 
 BankAccount::BankAccount(const char id[8], double balance, const char* name)
+    : name(nullptr)
 {
     setId(id);
     setBalance(balance);
@@ -65,16 +68,12 @@ BankAccount::BankAccount(const char id[8], double balance, const char* name)
 }
 
 BankAccount::BankAccount(const BankAccount& other)
-    : balance(other.balance), name(nullptr)
+    : balance(other.balance)
 {
     strcpy(id, other.id);
 
-    // We need to make sure that other.name has allocated memory
-    if (other.name != nullptr)
-    {
-        name = new char[strlen(other.name) + 1];
-        strcpy(name, other.name);
-    }
+    name = new char[strlen(other.name) + 1];
+    strcpy(name, other.name);
 }
 
 BankAccount::~BankAccount()
@@ -84,24 +83,17 @@ BankAccount::~BankAccount()
 
 BankAccount& BankAccount::operator=(const BankAccount& other)
 {
-    // We must check if we aren't assigning
-    // an object to itself. If we assign an object
-    // to its self and we don't check if it's the same object
-    // we are going to delete its allocated dynamic memory.
-    // Which is a problem!
+    // We must check if we aren't assigning an object to itself.
+    // If we assign an object to itself, we will delete its allocated dynamic memory,
+    // meaning we will attempt to copy from memory that doesn't exist
     if (this != &other)
     {
-        delete[] name;
-
         strcpy(id, other.id);
         balance = other.balance;
-        name = nullptr;
-
-        if (other.name != nullptr)
-        {
-            name = new char[strlen(other.name) + 1];
-            strcpy(name, other.name);
-        }      
+        
+        delete[] name;
+        name = new char[strlen(other.name) + 1];
+        strcpy(name, other.name);    
     }
 
     return *this;
@@ -124,10 +116,10 @@ double BankAccount::getBalance() const
 
 void BankAccount::setId(const char id[8])
 {
-    // We want to validate id. It might be less than 7 characters
+    // We want to validate id. It should be exactly 7 characters (+1 for '\0)
     if (strlen(id) != 7)
     {
-        // In code, we might want to throw and exception here
+        // Later in the course, we might want to throw and exception here
         // and let the calling function handle the error
         std::cout << "Invalid id! Id set to 'INVALID'";
         strcpy(this->id, "INVALID");
@@ -139,7 +131,7 @@ void BankAccount::setId(const char id[8])
 
 void BankAccount::setName(const char* name)
 {
-    // We need to make sure the data is valid this time!
+    // We need to make sure the passed name is valid
     if(name == nullptr)
         return;
 
@@ -147,7 +139,7 @@ void BankAccount::setName(const char* name)
         delete[] this->name;
 
     this->name = new char[strlen(name) + 1]; // + 1 for '\0'
-    strcpy(this->name, name);                // '0' gets copied over
+    strcpy(this->name, name);                // '\0' gets copied over
 }
 
 void BankAccount::setBalance(double balance)
