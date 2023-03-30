@@ -119,7 +119,7 @@ void BankAccount::setId(const char id[8])
     // We want to validate id. It should be exactly 7 characters (+1 for '\0)
     if (strlen(id) != 7)
     {
-        // Later in the course, we might want to throw and exception here
+        // Later in the course, we might want to throw an exception here
         // and let the calling function handle the error
         std::cout << "Invalid id! Id set to 'INVALID'";
         strcpy(this->id, "INVALID");
