@@ -9,13 +9,13 @@ class BankAccount
         BankAccount();
         // Constructor
         // We use const char[] because we are sending a pointer to an array,
-        // and we want to guarantee that we won't change it's content
+        // and we want to guarantee that we won't change its content
         BankAccount(const char id[8], double balance, const char name[128]);
 
         // Accessors
 
         // Same idea. We want to return a const char array.
-        // We don't want a user to change it's content in any way!
+        // We don't want a user to change its content in any way!
         const char* getId() const;
         const char* getName() const;
         double getBalance() const;
@@ -45,10 +45,10 @@ class BankAccount
 BankAccount::BankAccount()
     : balance(0) // Important! This is called a member initalizer list
     // The order in which the class members(fields) are assigned is determined
-    // by their order of declaration in the class! The order in which we call them
-    // in the initalizer list DOES NOT matter.
+    // by their order of declaration inside the class!
+    // The order in which we call them in the initalizer list does NOT matter.
     // So if we initalized id and name, it will first set the value for id, then for balance
-    // and finally for name. It will do this no matter the order of assignments in the list!
+    // and finally for name. It will do this no matter the order of the assignments in the list!
 {
     strcpy(id, "UNKNOWN");
     strcpy(name, "UNKNOWN");
@@ -79,10 +79,10 @@ double BankAccount::getBalance() const
 
 void BankAccount::setId(const char id[8])
 {
-    // We want to validate id. It might be less than 7 characters
+    // We want to validate id. It should be exactly 7 characters (+1 for '\0)
     if (strlen(id) != 7)
     {
-        // In code, we might want to throw and exception here
+        // Later in the course, we might want to throw an exception here
         // and let the calling function handle the error
         std::cout << "Invalid id! Id set to 'INVALID'";
         strcpy(this->id, "INVALID");
@@ -90,7 +90,7 @@ void BankAccount::setId(const char id[8])
     }
 
     // 'this' is a pointer to the current instance of the class
-    // this is why we call operator '->' on it, istead of the '.' operator
+    // this is why we call operator '->' on it, instead of the '.' operator
     // It is needed here because the field of the class is being 'shadowed'.
     // The most local variable is 'id' which is sent as a parameter to the function.
     // This means that the class field 'id' must be accessed through 'this'
@@ -105,7 +105,7 @@ void BankAccount::setName(const char name[128])
 
 void BankAccount::setBalance(double balance)
 {
-    // We can not have an invalid balance!
+    // We can not have a negative balance!
     if (balance <= 0)
     {
         this->balance = 0;
@@ -119,7 +119,7 @@ void BankAccount::withdrawMoney(double amount)
 {
     if (balance < amount)
     {
-        // We might want to throw an exception here,
+        // Later in the course, we might want to throw an exception here
         // and let the calling function handle the error
         std::cout << "Insufficient funds!";
         return;
