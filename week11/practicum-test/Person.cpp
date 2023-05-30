@@ -29,6 +29,18 @@ Person::Person(const char* firstName, const char* middleName, const char* lastNa
     }
 }
 
+Person& Person::operator=(const Person& other)
+{
+    if (this != &other)
+    {
+        setFirstName(other.firstName);
+        setMiddleName(other.middleName);
+        setLastName(other.lastName);
+    }
+
+    return *this;
+}
+
 const char* Person::getFirstName() const
 {
     return firstName;

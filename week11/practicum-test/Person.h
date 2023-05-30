@@ -6,6 +6,8 @@ public:
 	Person(const char* firstName, const char* lastName, const char* UCN);
 	Person(const char* firstName, const char* middleName, const char* lastName, const char* UCN);
 
+	Person& operator=(const Person& other);
+
 	const char* getFirstName() const;
 	const char* getMiddleName() const;
 	const char* getLastName() const;
